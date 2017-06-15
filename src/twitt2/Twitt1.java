@@ -26,24 +26,27 @@ public class Twitt1 {
      * @param args menú de twitter
      */
    public static void main(String[] args) {
-        Metodos.acceso();
-        int opcion;
-
-        do { 
-            opcion = Integer.parseInt(JOptionPane.showInputDialog("1. Nuevo estado \n 2.TimeLine \n 3.Buscar un twitt \n 4.MP "));
-            switch (opcion) {
-
-                case 1:Metodos.twitear("Hola");
-                    break;
-                case 2:Metodos.timeLine();
-                    break;
-                case 3:Metodos.buscarTt("Hola");
-                    break;
-                case 4:Metodos.enviarMP(JOptionPane.showInputDialog("Introduce destinatario"),JOptionPane.showInputDialog("Introduce a mensaxe"));
-                    break;
-                
-            }
-
-        } while (opcion != 0);
-}
-}
+         
+       int select;
+             
+       do {
+  select = Integer.parseInt(JOptionPane.showInputDialog("1. Nuevo estado \n 2.TimeLine \n 3.BuscarTwit \n 4.Mensaje \n 5.Seleccionar twits"));
+    switch(select){
+        
+        case 1:Metodos.twitearN(JOptionPane.showInputDialog(null,"Introducir nuevo Estado"));
+            break;
+        case 2:Metodos.lineaTiempo();
+            break;
+        case 3:Metodos.buscarTwit(JOptionPane.showInputDialog("Introduce el hastag"));   
+            break;
+        case 4:Metodos.enviarMensaje(JOptionPane.showInputDialog("Introduce destinatario"),JOptionPane.showInputDialog("Introduce el mensaje"));
+            break;
+        case 5:Metodos.seleccion();
+            break;
+    }
+  
+          }while(select!=0);
+    }
+        
+        
+    }
