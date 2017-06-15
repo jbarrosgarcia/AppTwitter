@@ -6,17 +6,19 @@
 package twitt2;
 
   
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
-import javax.swing.JOptionPane;
-import twitter4j.*;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
+import twitter4j.DirectMessage;
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
+
 /**
  * 
  * @author Jose Barros
@@ -25,104 +27,99 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class Metodos {
     
-    static ConfigurationBuilder cb;
-    static Twitter twitter;
-    static Status estado;
-    static DirectMessage mensaje;
+     static Twitter twitter =TwitterFactory.getSingleton(); //adición del singleton
+    static Status status;
+    static DirectMessage message;
     static ArrayList <Status> twits = new ArrayList<Status>();
     static Iterator <Status>it = twits.iterator();
     
     
-   
-  /**
-   * acceso as contraseñas da conta twitter
-   */ 
-     
-    
-    public static void acceso(){
-        
-        cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true);
-        cb.setOAuthConsumerKey("0ZWaOjOZyP5wDTvbUM31J8FC1");
-        cb.setOAuthConsumerSecret("TIYKsQfLk8GjNhPvttSrLoszdP7DTBbAeYpvK627AWCU4Cide0");
-        cb.setOAuthAccessToken("2906196855-RMJ4U2Y4mQSpFSHG9Cy7N6anxBEbLUmLvQDOg5M");
-        cb.setOAuthAccessTokenSecret("zeqRnDvoalfzNqrw1aagiS8qCxLssXVJ2HLoqfTIavYlO");
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        twitter = tf.getInstance();
-    }
-/**
- * timeline linea de tempo twitts
+    /**
+ * Usado para recoger en una colección la linea temporal del twitter del usuario.
  */
-    public static void timeLine () {
+        public static void lineaTiempo() {
 
         List<Status> statuses;
-
         try {
-            statuses= twitter.getHomeTimeline();
-            System.out.println("Enseñando timeline.");
-            for (twitter4j.Status estado : statuses) {
-                System.out.println(estado.getUser().getName() + ":"
-                        + estado.getText());
-                twits.add(estado);
+            statuses = twitter.getHomeTimeline();
+            System.out.println("Showing home timeline.");
+            for (Status status : statuses) {
+                System.out.println(status.getUser().getName() + ":"
+                        + status.getText());
+                twits.add(status);
+
             }
         } catch (TwitterException ex) {
-            java.util.logging.Logger.getLogger(twitt2.Twitt1.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TwitterCOD.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
     }
-/**
- * post un novo tweet
- * @param estado novo tweet
- * a
+        
+        /**
+ * utilizado para twittear nuevos estados,escribiéndolos por teclado.
+ * @param latestStatus se recibe el mensaje de la actualización de estado.
  */
-   public static void twitear(String publicacion) {
-    try {
-            estado = twitter.updateStatus(publicacion);
-            System.out.println("Publicacion -> [" + estado.getText() + "].");
-        } catch (TwitterException ex) {
-            java.util.logging.Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-}
-
-/**
- * BuscarTV busca Twitts
- * 
- * @param buscar palabra a buscar
- */
-    public static void buscarTt(String buscar) {
-
-        QueryResult result;
-        try {
-           Query query = new Query(JOptionPane.showInputDialog("Hashtag a buscar: "));
-            result=twitter.search(query);
-            for (twitter4j.Status statuse : result.getTweets()) {
-            System.out.println("@" + statuse.getUser().getScreenName() + ":" + statuse.getText());
-            }
-        }catch (TwitterException ex) {
-            java.util.logging.Logger.getLogger(twitt2.Twitt1.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * enviarMp envia mensaxe privado
-     * 
-     *
-     * @param destinatario perfil ó que mandamos MP
-     * 
-     * @param mensaje mensaxe que mandamos
-     */
-   public static void enviarMP(String destinatario, String mensaje) {
+    public static void twitearN(String latestStatus) {
 
         try {
-
-            Metodos.mensaje = twitter.sendDirectMessage(destinatario, mensaje);
+            status = twitter.updateStatus(latestStatus);
+            System.out.println("Successfully updated the status to [" + status.getText() + "].");
         } catch (TwitterException ex) {
-            java.util.logging.Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Autorizacion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Enviar: " + Metodos.mensaje.getText() + " a @" + Metodos.mensaje.getRecipientScreenName());
 
     }
     
+    /**
+ * Usado para buscar twits relacionados con la palabra que nosotros introduzcamos en la búsqueda.
+ * 
+ * @param busqueda Cadena de caracteres donde introducimos el contenido a buscar
+ */
+    public static void buscarTwit(String busqueda) {
+
+        Query query = new Query(busqueda);
+        QueryResult result;
+        try {
+            result = twitter.search(query);
+            for (Status status : result.getTweets()) {
+                System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
+                
+            }
+        } catch (TwitterException ex) {
+            java.util.logging.Logger.getLogger(Autorizacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * utilizado para poder enviar mensaje privados,sólo a gente a la que
+     * seguimos o nos sigue.
+     *
+     * @param destinatario direccion de twitter a la que queremos enviar el
+     * correo.
+     * @param mensaje contiene  la cadena de caracteres a enviar
+     */
+    public static void enviarMensaje(String destinatario, String mensaje) {
+
+        try {
+
+            message = twitter.sendDirectMessage(destinatario, mensaje);
+        } catch (TwitterException ex) {
+            java.util.logging.Logger.getLogger(Autorizacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Sent: " + message.getText() + " to @" + message.getRecipientScreenName());
+
+    }
+    /**
+     * recoge en un nuevo arraylist objetos tipo Status,pudiendo recoger sus diferentes variables
+     */
+    public static void seleccion(){
+      
+    for(int i=0;i<twits.size();i++){
+  System.out.println(twits.get(i).getUser()+""+twits.get(i).getGeoLocation()+""+twits.get(i).getText());
+        
+    }
+       
+    }
     
     
 }
