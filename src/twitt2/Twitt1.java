@@ -30,14 +30,14 @@ public class Twitt1 {
         int opcion;
 
         do { 
-            opcion = Integer.parseInt(JOptionPane.showInputDialog("1. Novo estado \n 2.TimeLine \n 3.Buscar un twitt \n 4.Mensaxe Privada "));
+            opcion = Integer.parseInt(JOptionPane.showInputDialog("1. Nuevo estado \n 2.TimeLine \n 3.Buscar un twitt \n 4.MP "));
             switch (opcion) {
 
                 case 1:Metodos.twitear("Hola");
                     break;
                 case 2:Metodos.timeLine();
                     break;
-                case 3:Metodos.buscarTt("hola");
+                case 3:Metodos.buscarTt("Hola");
                     break;
                 case 4:Metodos.enviarMP(JOptionPane.showInputDialog("Introduce destinatario"),JOptionPane.showInputDialog("Introduce a mensaxe"));
                     break;
