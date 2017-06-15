@@ -50,7 +50,7 @@ public class Metodos {
 
             }
         } catch (TwitterException ex) {
-            java.util.logging.Logger.getLogger(TwitterCOD.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Twitt1.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -65,7 +65,7 @@ public class Metodos {
             status = twitter.updateStatus(latestStatus);
             System.out.println("Successfully updated the status to [" + status.getText() + "].");
         } catch (TwitterException ex) {
-            java.util.logging.Logger.getLogger(Autorizacion.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -86,7 +86,7 @@ public class Metodos {
                 
             }
         } catch (TwitterException ex) {
-            java.util.logging.Logger.getLogger(Autorizacion.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -104,7 +104,7 @@ public class Metodos {
 
             message = twitter.sendDirectMessage(destinatario, mensaje);
         } catch (TwitterException ex) {
-            java.util.logging.Logger.getLogger(Autorizacion.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("Sent: " + message.getText() + " to @" + message.getRecipientScreenName());
 
